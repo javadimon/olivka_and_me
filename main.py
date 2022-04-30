@@ -72,9 +72,12 @@ def import_data():
                         epochs=10,
                         verbose=2)
 
-    scores = model.evaluate(test_dataset, verbose=1)
-    print(scores)
+    test_acc = model.evaluate(test_dataset, verbose=2)
+    print('\nTest accuracy:', test_acc)
 
+    probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+    predictions = probability_model.predict(test_dataset)
+    print(predictions)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
