@@ -10,10 +10,10 @@ def print_version():
     print(tf.__version__)
 
 
-def import_data():
+def import_data_and_teach():
     train_dataset = tf.keras.utils.image_dataset_from_directory(
         'photos/training/',
-        validation_split=0.5,
+        validation_split=0.1,
         subset="training",
         seed=123,
         image_size=(100, 100)
@@ -21,7 +21,7 @@ def import_data():
 
     validation_dataset = tf.keras.utils.image_dataset_from_directory(
         'photos/training/',
-        validation_split=0.5,
+        validation_split=0.1,
         subset="validation",
         seed=123,
         image_size=(100, 100)
@@ -32,7 +32,7 @@ def import_data():
     for images, labels in train_dataset:
         print(images, labels)
 
-    test_dataset = tf.keras.utils.image_dataset_from_directory('photos/training/', image_size=(100, 100))
+    test_dataset = tf.keras.utils.image_dataset_from_directory('photos/training/')
     print(test_dataset.class_names)
 
     # Создаем последовательную модель
@@ -60,7 +60,7 @@ def import_data():
     model.add(tf.keras.layers.Dropout(0.2))
     model.add(tf.keras.layers.Dense(256, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.2))
-    # Выходной слой, 131 нейрон по количеству классов
+    # Выходной слой, 2 нейрона по количеству классов
     model.add(tf.keras.layers.Dense(2, activation='softmax'))
 
     model.compile(loss='sparse_categorical_crossentropy',
@@ -72,15 +72,14 @@ def import_data():
                         epochs=10,
                         verbose=2)
 
-    test_acc = model.evaluate(test_dataset, verbose=2)
+    test_acc = model.evaluate(validation_dataset, verbose=2)
     print('\nTest accuracy:', test_acc)
 
     probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-    predictions = probability_model.predict(test_dataset)
+    predictions = probability_model.predict(train_dataset)
     print(predictions)
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     print_version()
-    import_data()
-    # train(train_dataset)
+    import_data_and_teach()
