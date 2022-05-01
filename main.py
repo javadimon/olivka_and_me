@@ -62,6 +62,7 @@ def import_data_and_teach():
     model.add(tf.keras.layers.Dropout(0.2))
     # Выходной слой, 2 нейрона по количеству классов
     model.add(tf.keras.layers.Dense(2, activation='softmax'))
+    model.summary()
 
     model.compile(loss='sparse_categorical_crossentropy',
                   optimizer="adam",
@@ -75,9 +76,27 @@ def import_data_and_teach():
     test_acc = model.evaluate(validation_dataset, verbose=2)
     print('\nTest accuracy:', test_acc)
 
-    probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-    predictions = probability_model.predict(train_dataset)
-    print(predictions)
+    # probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+    # predictions = probability_model.predict(train_dataset(2))
+    # print(predictions)
+
+    # img = tf.keras.preprocessing.image.load_img('photos/training/me/me004.jpg', target_size=(100, 100), color_mode="grayscale")
+    # plt.imshow(img, cmap='gray')
+    # plt.show()
+    # # Преобразуем картинку в массив
+    # x = tf.keras.preprocessing.image.img_to_array(img)
+    # # Меняем форму массива в плоский вектор
+    # # x = x.reshape(1, 10000)
+    # # Инвертируем изображение
+    # x = 255 - x
+    # # Нормализуем изображение
+    # x /= 255
+    # np.expand_dims(x, axis=0)
+    #
+    # # probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
+    # # prediction = probability_model.predict(x)
+    prediction = model.predict(validation_dataset)
+    print(prediction)
 
 
 if __name__ == '__main__':
